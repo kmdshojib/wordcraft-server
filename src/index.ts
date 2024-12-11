@@ -6,10 +6,10 @@ dotenv.config({
     path: "./.env"
 })
 
-const port: number | string = process.env.PORT || 5000
+const port: number= 5000
 connectDB()
     .then(() => {
-        app.listen(port, () => {
+        app.listen(process.env.PORT ? process.env.PORT : port, () => {
             console.log(`App listening on ${port}`);
         })
     })
