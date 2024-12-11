@@ -7,9 +7,6 @@ dotenv.config()
 if (!process.env.CLOUD_NAME || !process.env.CLOUD_API_KEY || !process.env.CLOUD_API_SECRET) {
     throw new Error("Cloudinary credentials are missing in the environment.");
 }
-const CLOUD_NAME="dy85l0m09"
-const CLOUD_API_KEY="567263917634274"
-const CLOUD_API_SECRET="iOPbtw9XtrFwVxNEfWzuNGSl98A"
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
