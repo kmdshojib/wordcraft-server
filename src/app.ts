@@ -17,8 +17,8 @@ app.get('/', (req, res) => {
     res.send('Hello, TypeScript Node Express!');
 });
 
-import userRouter from "./routes/auth.routes"
+// import userRouter from "./routes/auth.routes"
 // routes declarations
-app.use("/api/users", userRouter);
+// app.use("/api/users", userRouter);
 
 export { app }
