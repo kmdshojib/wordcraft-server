@@ -9,10 +9,10 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({
     path: "./.env"
 });
-const port = 5000;
+const port = process.env.PORT || 5000;
 (0, db_1.default)()
     .then(() => {
-    app_1.app.listen(process.env.PORT ? process.env.PORT : port, () => {
+    app_1.app.listen(port, () => {
         console.log(`App listening on ${port}`);
     });
 })
