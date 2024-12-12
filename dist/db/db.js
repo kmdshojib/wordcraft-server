@@ -8,7 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
 const constants_1 = require("../constants");
 let mongoDBUrl;
 if (process.env.NODE_ENV === 'production') {
@@ -20,12 +24,13 @@ else {
 }
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("mogo deplo issue");
-    // try {
-    //     const connectionIstance = await mongoose.connect(mongoDBUrl)
-    //     console.log(`DB connection established: ${connectionIstance.connection.host}`);
-    // } catch (error) {
-    //     console.error(error);
-    //     process.exit(1);
-    // }
+    try {
+        const connectionIstance = yield mongoose_1.default.connect(`mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
+        console.log(`DB connection established: ${connectionIstance.connection.host}`);
+    }
+    catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
 });
 exports.default = connectDB;

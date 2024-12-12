@@ -10,13 +10,13 @@ if (process.env.NODE_ENV === 'production') {
 }
 const connectDB = async () => {
     console.log("mogo deplo issue")
-    // try {
-    //     const connectionIstance = await mongoose.connect(mongoDBUrl)
-    //     console.log(`DB connection established: ${connectionIstance.connection.host}`);
-    // } catch (error) {
-    //     console.error(error);
-    //     process.exit(1);
-    // }
+    try {
+        const connectionIstance = await mongoose.connect(`mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`)
+        console.log(`DB connection established: ${connectionIstance.connection.host}`);
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
 }
 
 export default connectDB;
