@@ -8,19 +8,12 @@ if (!process.env.CLOUD_NAME || !process.env.CLOUD_API_KEY || !process.env.CLOUD_
     throw new Error("Cloudinary credentials are missing in the environment.");
 }
 
-// cloudinary.config({
-//     cloud_name: process.env.CLOUD_NAME,
-//     api_key: process.env.CLOUD_API_KEY,
-//     api_secret: process.env.CLOUD_API_SECRET,
-// });
-const CLOUD_NAME="dy85l0m09"
-const CLOUD_API_SECRET="iOPbtw9XtrFwVxNEfWzuNGSl98A"
-const CLOUD_API_KEY="567263917634274"
 cloudinary.config({
-    cloud_name: CLOUD_NAME,
-    api_key: CLOUD_API_KEY,
-    api_secret: CLOUD_API_SECRET,
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
 });
+
 
 // const uploadOnCloud = async (filePath: string): Promise<UploadApiResponse | null> => {
 //     try {
@@ -66,4 +59,54 @@ const uploadOnCloud = async (filePath: string): Promise<UploadApiResponse | null
         return null;
     }
 };
+// export const uploadImage = (fileBuffer: Buffer): Promise<string> => {
+//     return new Promise<string>((resolve, reject) => {
+//         cloudinary.uploader.upload_stream(
+//             { resource_type: "auto" },
+//             (error: any, result: any) => {
+//                 if (error) {
+//                     reject(error);
+//                 } else {
+//                     resolve(result.secure_url);
+//                 }
+//             }
+//         ).end(fileBuffer);
+//     });
+// };
+export const uploadImage = (fileBuffer: Buffer): Promise<string> => {
+    return new Promise<string>((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+            { resource_type: "image" },
+            (error: any, result: any) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result.secure_url);
+                }
+            }
+        ).end(fileBuffer);
+    });
+}
+// export const generateSignature = (req: Request, res: Response): void => {
+//     try {
+//         const timestamp = Math.round(new Date().getTime() / 1000); // Generate a UNIX timestamp
+
+//         // Generate a signature using Cloudinary's utility function
+//         const signature = cloudinary.v2.utils.api_sign_request(
+//             {
+//                 timestamp,
+//                 folder: "user_uploads", // Optional: Specify a folder
+//             },
+//             CLOUD_API_SECRET
+//         );
+
+//         // Send the signature and timestamp as a response
+//         res.status(200).json({ signature, timestamp });
+//     } catch (error) {
+//         console.error("Error generating signature:", error);
+
+//         // Send an error response
+//         res.status(500).json({ error: "Failed to generate signature" });
+//     }
+// };
 export { uploadOnCloud };
