@@ -16,7 +16,7 @@ const ApiResponse_1 = require("../utils/ApiResponse");
 const lesson_model_1 = require("../model/lesson.model");
 // Create Category with Vocabulary
 const createCategoryWithVocabulary = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, icon, vocab } = req.body;
+    const { title, icon, vocab, createdBy } = req.body;
     if (!title || !icon) {
         throw new ApiError_1.ApiError(400, "Title and icon are required!");
     }
@@ -24,20 +24,19 @@ const createCategoryWithVocabulary = (0, asyncHandeller_1.asyncHandler)((req, re
     if (existedCategory) {
         throw new ApiError_1.ApiError(409, "Category already exists! Use a different title.");
     }
-    const category = yield lesson_model_1.LessonCategory.create({ title, icon });
+    const category = yield lesson_model_1.LessonCategory.create({ title, icon, createdBy });
     if (vocab && Array.isArray(vocab)) {
         for (const item of vocab) {
-            const { word, pronunciation, meaning, whenToSay, lessonNo, adminEmail } = item;
-            if (!word || !pronunciation || !meaning || !whenToSay || !lessonNo || !adminEmail) {
-                throw new ApiError_1.ApiError(400, "All vocabulary fields are required!");
-            }
+            const { word, pronunciation, meaning, whenToSay } = item;
+            // if (!word || !pronunciation || !meaning || !whenToSay) {
+            //     throw new ApiError(400, "All vocabulary fields are required!");
+            // }
             const vocabulary = yield lesson_model_1.Vocabulary.create({
                 word,
                 pronunciation,
                 meaning,
                 whenToSay,
-                lessonNo,
-                adminEmail,
+                adminEmail: createdBy,
                 lessonCategory: category._id,
             });
             category.vocabulary.push(vocabulary._id);

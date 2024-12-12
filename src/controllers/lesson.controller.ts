@@ -6,7 +6,7 @@ import { LessonCategory, Vocabulary } from "../model/lesson.model";
 
 // Create Category with Vocabulary
 const createCategoryWithVocabulary = asyncHandler(async (req: Request, res: Response) => {
-    const { title, icon, vocab } = req.body;
+    const { title, icon, vocab,createdBy } = req.body;
 
     if (!title || !icon) {
         throw new ApiError(400, "Title and icon are required!");
@@ -17,23 +17,22 @@ const createCategoryWithVocabulary = asyncHandler(async (req: Request, res: Resp
         throw new ApiError(409, "Category already exists! Use a different title.");
     }
 
-    const category = await LessonCategory.create({ title, icon });
+    const category = await LessonCategory.create({ title, icon,createdBy });
 
     if (vocab && Array.isArray(vocab)) {
         for (const item of vocab) {
-            const { word, pronunciation, meaning, whenToSay, lessonNo, adminEmail } = item;
+            const { word, pronunciation, meaning, whenToSay } = item;
 
-            if (!word || !pronunciation || !meaning || !whenToSay || !lessonNo || !adminEmail) {
-                throw new ApiError(400, "All vocabulary fields are required!");
-            }
+            // if (!word || !pronunciation || !meaning || !whenToSay) {
+            //     throw new ApiError(400, "All vocabulary fields are required!");
+            // }
 
             const vocabulary: any = await Vocabulary.create({
                 word,
                 pronunciation,
                 meaning,
                 whenToSay,
-                lessonNo,
-                adminEmail,
+                adminEmail:createdBy,
                 lessonCategory: category._id,
             });
 
