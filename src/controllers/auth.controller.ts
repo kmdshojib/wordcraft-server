@@ -37,15 +37,15 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
     }
 
     // Save photo temporarily and upload to cloud
-    const tempFilePath = path.join(__dirname, "../../public/temp", photoFile.name);
-    await photoFile.mv(tempFilePath); // Move file to temporary directory
+    // const tempFilePath = path.join(__dirname, "../../public/temp", photoFile.name);
+    // await photoFile.mv(tempFilePath); // Move file to temporary directory
 
-    const photoUrl = await uploadOnCloud(tempFilePath); // Cloud upload utility
-    if (!photoUrl) {
-        // Clean up temporary file
-        await fs.unlink(tempFilePath);
-        throw new ApiError(500, "Failed to upload photo to cloud storage.");
-    }
+    // const photoUrl = await uploadOnCloud(tempFilePath); // Cloud upload utility
+    // if (!photoUrl) {
+    //     // Clean up temporary file
+    //     await fs.unlink(tempFilePath);
+    //     throw new ApiError(500, "Failed to upload photo to cloud storage.");
+    // }
 
     // Clean up temporary file after successful upload
 
@@ -54,7 +54,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
         name,
         email,
         password,
-        photoUrl: photoUrl.secure_url, // URL from cloud storage
+        // photoUrl: photoUrl.secure_url, // URL from cloud storage
     });
 
     // Fetch the created user without the password field

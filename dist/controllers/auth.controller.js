@@ -27,10 +27,7 @@ exports.getAllUsersExceptLoggedIn = exports.updateUserRole = exports.loginUser =
 const asyncHandeller_1 = require("../utils/asyncHandeller");
 const ApiError_1 = require("../utils/ApiError");
 const user_model_1 = __importDefault(require("../model/user.model"));
-const cloudenery_1 = require("../utils/cloudenery");
 const ApiResponse_1 = require("../utils/ApiResponse");
-const promises_1 = __importDefault(require("fs/promises"));
-const path_1 = __importDefault(require("path"));
 const registerUser = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     // Validate required fields
@@ -55,21 +52,21 @@ const registerUser = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(
         throw new ApiError_1.ApiError(400, "Photo size exceeds the 5 MB limit.");
     }
     // Save photo temporarily and upload to cloud
-    const tempFilePath = path_1.default.join(__dirname, "../../public/temp", photoFile.name);
-    yield photoFile.mv(tempFilePath); // Move file to temporary directory
-    const photoUrl = yield (0, cloudenery_1.uploadOnCloud)(tempFilePath); // Cloud upload utility
-    if (!photoUrl) {
-        // Clean up temporary file
-        yield promises_1.default.unlink(tempFilePath);
-        throw new ApiError_1.ApiError(500, "Failed to upload photo to cloud storage.");
-    }
+    // const tempFilePath = path.join(__dirname, "../../public/temp", photoFile.name);
+    // await photoFile.mv(tempFilePath); // Move file to temporary directory
+    // const photoUrl = await uploadOnCloud(tempFilePath); // Cloud upload utility
+    // if (!photoUrl) {
+    //     // Clean up temporary file
+    //     await fs.unlink(tempFilePath);
+    //     throw new ApiError(500, "Failed to upload photo to cloud storage.");
+    // }
     // Clean up temporary file after successful upload
     // Create the user
     const user = yield user_model_1.default.create({
         name,
         email,
         password,
-        photoUrl: photoUrl.secure_url, // URL from cloud storage
+        // photoUrl: photoUrl.secure_url, // URL from cloud storage
     });
     // Fetch the created user without the password field
     const createdUser = yield user_model_1.default.findById(user._id).select("-password");

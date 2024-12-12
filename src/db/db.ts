@@ -3,15 +3,16 @@ import { DB_NAME } from "../constants";
 import dotenv from "dotenv";
 dotenv.config()
 
-let mongoDBUrl: string;
+let mongoDBUrl  = `mongodb+srv://worcraftDb:worcraftDb@cluster0.ygyoxnw.mongodb.net/wordcraft`;
 if (process.env.NODE_ENV === 'production') {
     // mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
     mongoDBUrl = `mongodb+srv://worcraftDb:worcraftDb@cluster0.ygyoxnw.mongodb.net/wordcraft`
 } else {
-    mongoDBUrl = `mongodb://localhost:27017/${DB_NAME}`
+
+    // mongoDBUrl = `mongodb://localhost:27017/${DB_NAME}`
 }
 const connectDB = async () => {
-    console.log("mogo deplo issue")
+
     try {
         const connectionIstance = await mongoose.connect(mongoDBUrl)
         console.log(`DB connection established: ${connectionIstance.connection.host}`);
