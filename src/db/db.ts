@@ -9,13 +9,14 @@ if (process.env.NODE_ENV === 'production') {
     mongoDBUrl = `mongodb://localhost:27017/${DB_NAME}`
 }
 const connectDB = async () => {
-    try {
-        const connectionIstance = await mongoose.connect(mongoDBUrl)
-        console.log(`DB connection established: ${connectionIstance.connection.host}`);
-    } catch (error) {
-        console.error(error);
-        process.exit(1);
-    }
+    console.log("mogo deplo issue")
+    // try {
+    //     const connectionIstance = await mongoose.connect(mongoDBUrl)
+    //     console.log(`DB connection established: ${connectionIstance.connection.host}`);
+    // } catch (error) {
+    //     console.error(error);
+    //     process.exit(1);
+    // }
 }
 
 export default connectDB;
