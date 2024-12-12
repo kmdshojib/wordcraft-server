@@ -14,10 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const constants_1 = require("../constants");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 let mongoDBUrl;
 if (process.env.NODE_ENV === 'production') {
-    mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-    // mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/wordcraft`
+    // mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+    mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/wordcraft`;
 }
 else {
     mongoDBUrl = `mongodb://localhost:27017/${constants_1.DB_NAME}`;
@@ -25,7 +27,7 @@ else {
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("mogo deplo issue");
     try {
-        const connectionIstance = yield mongoose_1.default.connect(`mongodb+srv://worcraftDb:worcraftDb@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
+        const connectionIstance = yield mongoose_1.default.connect(mongoDBUrl);
         console.log(`DB connection established: ${connectionIstance.connection.host}`);
     }
     catch (error) {
