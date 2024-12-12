@@ -14,9 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const constants_1 = require("../constants");
+let mongoDBUrl;
+if (process.env.NODE_ENV === 'production') {
+    mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/wordcraft`;
+}
+else {
+    mongoDBUrl = `mongodb://localhost:27017/${constants_1.DB_NAME}`;
+}
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const connectionIstance = yield mongoose_1.default.connect(`mongodb://localhost:27017/${constants_1.DB_NAME}`);
+        const connectionIstance = yield mongoose_1.default.connect(mongoDBUrl);
         console.log(`DB connection established: ${connectionIstance.connection.host}`);
     }
     catch (error) {

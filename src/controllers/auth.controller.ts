@@ -72,20 +72,34 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
+    // Check for missing email or password
     if (!email) {
-        throw new ApiError(400, "Email Required to Login!")
+        throw new ApiError(400, "Email is required to login!");
     }
     if (!password) {
-        throw new ApiError(400, "Password Required to Login!")
+        throw new ApiError(400, "Password is required to login!");
     }
-    const user = await User.findOne({ email }).select("-password");
+
+    // Find the user with the provided email
+    const user = await User.findOne({ email });
     if (!user) {
-        throw new ApiError(401, "User not found Please Register to login!")
+        throw new ApiError(401, "User not found. Please register to login!");
     }
-    return res.json(
-        new ApiResponse(200, user, "User logged in successfully!")
-    )
-})
+
+    // Verify the password
+    const isPasswordValid = await user.isPasswordCorrect(password);
+    if (!isPasswordValid) {
+        throw new ApiError(401, "Invalid password. Please try again!");
+    }
+
+    // Exclude the password from the response
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    return res.status(200).json(
+        new ApiResponse(200, userWithoutPassword, "User logged in successfully!")
+    );
+});
+
 
 const updateUserRole = asyncHandler(async (req: Request, res: Response) => {
     const { email, role } = req.body;

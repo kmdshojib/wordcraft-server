@@ -8,4 +8,5 @@ export interface IUser extends Document {
     role: string;
     createdAt: Date;
     updatedAt: Date;
+    isPasswordCorrect(password: string): Promise<boolean>;
 }

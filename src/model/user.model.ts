@@ -19,8 +19,8 @@ UserSchema.pre("save", async function (next) {
     next();
 })
 UserSchema.methods.isPasswordCorrect = async function (password: string) {
-    return await bcrypt.compare(password, this.password)
-}
+    return await bcrypt.compare(password, this.password);
+};
 // Create the User model
 const User: Model<IUser> = mongoose.model<IUser>("User", UserSchema);
 

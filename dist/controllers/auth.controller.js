@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -71,17 +82,26 @@ const registerUser = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(
 exports.registerUser = registerUser;
 const loginUser = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
+    // Check for missing email or password
     if (!email) {
-        throw new ApiError_1.ApiError(400, "Email Required to Login!");
+        throw new ApiError_1.ApiError(400, "Email is required to login!");
     }
     if (!password) {
-        throw new ApiError_1.ApiError(400, "Password Required to Login!");
+        throw new ApiError_1.ApiError(400, "Password is required to login!");
     }
-    const user = yield user_model_1.default.findOne({ email }).select("-password");
+    // Find the user with the provided email
+    const user = yield user_model_1.default.findOne({ email });
     if (!user) {
-        throw new ApiError_1.ApiError(401, "User not found Please Register to login!");
+        throw new ApiError_1.ApiError(401, "User not found. Please register to login!");
     }
-    return res.json(new ApiResponse_1.ApiResponse(200, user, "User logged in successfully!"));
+    // Verify the password
+    const isPasswordValid = yield user.isPasswordCorrect(password);
+    if (!isPasswordValid) {
+        throw new ApiError_1.ApiError(401, "Invalid password. Please try again!");
+    }
+    // Exclude the password from the response
+    const _a = user.toObject(), { password: _ } = _a, userWithoutPassword = __rest(_a, ["password"]);
+    return res.status(200).json(new ApiResponse_1.ApiResponse(200, userWithoutPassword, "User logged in successfully!"));
 }));
 exports.loginUser = loginUser;
 const updateUserRole = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
