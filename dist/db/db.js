@@ -25,7 +25,7 @@ else {
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("mogo deplo issue");
     try {
-        const connectionIstance = yield mongoose_1.default.connect(`mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
+        const connectionIstance = yield mongoose_1.default.connect(`mongodb+srv://worcraftDb:worcraftDb@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
         console.log(`DB connection established: ${connectionIstance.connection.host}`);
     }
     catch (error) {
