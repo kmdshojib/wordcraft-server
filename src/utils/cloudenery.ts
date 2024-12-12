@@ -8,12 +8,16 @@ if (!process.env.CLOUD_NAME || !process.env.CLOUD_API_KEY || !process.env.CLOUD_
     throw new Error("Cloudinary credentials are missing in the environment.");
 }
 
+// cloudinary.config({
+//     cloud_name: process.env.CLOUD_NAME,
+//     api_key: process.env.CLOUD_API_KEY,
+//     api_secret: process.env.CLOUD_API_SECRET,
+// });
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUD_API_KEY,
-    api_secret: process.env.CLOUD_API_SECRET,
+    cloud_name: "dy85l0m09",
+    api_key: "567263917634274",
+    api_secret: "iOPbtw9XtrFwVxNEfWzuNGSl98A",
 });
-
 const uploadOnCloud = async (filePath: string): Promise<UploadApiResponse | null> => {
     try {
         if (!filePath) {
