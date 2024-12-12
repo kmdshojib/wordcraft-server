@@ -16,7 +16,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const constants_1 = require("../constants");
 let mongoDBUrl;
 if (process.env.NODE_ENV === 'production') {
-    mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/wordcraft`;
+    mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+    // mongoDBUrl = `mongodb+srv://${process.env.ADMIN}:${process.env.PASSWORD}@cluster0.ygyoxnw.mongodb.net/wordcraft`
 }
 else {
     mongoDBUrl = `mongodb://localhost:27017/${constants_1.DB_NAME}`;
