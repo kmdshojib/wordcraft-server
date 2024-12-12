@@ -4,5 +4,7 @@ const express_1 = require("express");
 const auth_controller_1 = require("../controllers/auth.controller");
 const router = (0, express_1.Router)();
 router.route("/register").post(auth_controller_1.registerUser);
+router.get("/getUsers/:id", auth_controller_1.getAllUsersExceptLoggedIn);
+router.put("/updateRole", auth_controller_1.updateUserRole);
 router.route("/login").post(auth_controller_1.loginUser);
 exports.default = router;

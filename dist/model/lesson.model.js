@@ -40,11 +40,13 @@ const VocabularySchema = new mongoose_1.Schema({
     pronunciation: { type: String, required: true },
     meaning: { type: String, required: true },
     whenToSay: { type: String, required: true },
-    category: { type: mongoose_1.Schema.Types.ObjectId, ref: 'LessonCategory', required: true },
+    adminEmail: { type: String, required: true },
+    lessonCategory: { type: mongoose_1.Schema.Types.ObjectId, ref: 'LessonCategory', required: true },
 });
 const LessonCategorySchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     icon: { type: String, required: true },
+    createdBy: { type: String, required: false },
     vocabulary: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'Vocabulary' }],
 });
 const Vocabulary = mongoose_1.default.model('Vocabulary', VocabularySchema);

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUser = exports.registerUser = void 0;
+exports.getAllUsersExceptLoggedIn = exports.updateUserRole = exports.loginUser = exports.registerUser = void 0;
 const asyncHandeller_1 = require("../utils/asyncHandeller");
 const ApiError_1 = require("../utils/ApiError");
 const user_model_1 = __importDefault(require("../model/user.model"));
@@ -84,3 +84,27 @@ const loginUser = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(voi
     return res.json(new ApiResponse_1.ApiResponse(200, user, "User logged in successfully!"));
 }));
 exports.loginUser = loginUser;
+const updateUserRole = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, role } = req.body;
+    // Validate input
+    if (!email) {
+        throw new ApiError_1.ApiError(400, "Email is required to update role!");
+    }
+    if (!role) {
+        throw new ApiError_1.ApiError(400, "Role is required to update user!");
+    }
+    const user = yield user_model_1.default.findOne({ email });
+    if (!user) {
+        throw new ApiError_1.ApiError(404, "User not found!");
+    }
+    user.role = role;
+    yield user.save();
+    return res.json(new ApiResponse_1.ApiResponse(200, user, `User role successfully updated to ${user.role}!`));
+}));
+exports.updateUserRole = updateUserRole;
+const getAllUsersExceptLoggedIn = (0, asyncHandeller_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const loggedInUserId = req.params.id;
+    const users = yield user_model_1.default.find({ _id: { $ne: loggedInUserId } }).select("-password");
+    return res.json(new ApiResponse_1.ApiResponse(200, users, "Fetched all users except the logged-in user successfully!"));
+}));
+exports.getAllUsersExceptLoggedIn = getAllUsersExceptLoggedIn;

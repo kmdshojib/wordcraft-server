@@ -86,4 +86,36 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
         new ApiResponse(200, user, "User logged in successfully!")
     )
 })
-export { registerUser, loginUser };
+
+const updateUserRole = asyncHandler(async (req: Request, res: Response) => {
+    const { email, role } = req.body;
+
+    // Validate input
+    if (!email) {
+        throw new ApiError(400, "Email is required to update role!");
+    }
+    if (!role) {
+        throw new ApiError(400, "Role is required to update user!");
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new ApiError(404, "User not found!");
+    }
+    user.role = role;
+    await user.save();
+
+    return res.json(
+        new ApiResponse(200, user, `User role successfully updated to ${user.role}!`)
+    );
+});
+const getAllUsersExceptLoggedIn = asyncHandler(async (req: Request, res: Response) => {
+    const loggedInUserId = req.params.id;
+
+    const users = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
+
+    return res.json(
+        new ApiResponse(200, users, "Fetched all users except the logged-in user successfully!")
+    );
+});
+export { registerUser, loginUser, updateUserRole, getAllUsersExceptLoggedIn };

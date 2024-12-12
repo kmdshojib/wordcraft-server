@@ -5,7 +5,8 @@ interface IVocabulary extends Document {
     pronunciation: string;
     meaning: string;
     whenToSay: string;
-    category: mongoose.Schema.Types.ObjectId;
+    adminEmail: string;
+    lessonCategory: mongoose.Schema.Types.ObjectId;
 }
 
 const VocabularySchema: Schema<IVocabulary> = new Schema({
@@ -13,19 +14,21 @@ const VocabularySchema: Schema<IVocabulary> = new Schema({
     pronunciation: { type: String, required: true },
     meaning: { type: String, required: true },
     whenToSay: { type: String, required: true },
-    category: { type: Schema.Types.ObjectId, ref: 'LessonCategory', required: true },
+    adminEmail: { type: String, required: true },
+    lessonCategory: { type: Schema.Types.ObjectId, ref: 'LessonCategory', required: true },
 });
 
-// LessonCategory Interface and Schema
 interface ILessonCategory extends Document {
     title: string;
     icon: string;
+    createdBy?: string;
     vocabulary: mongoose.Schema.Types.ObjectId[];
 }
 
 const LessonCategorySchema: Schema<ILessonCategory> = new Schema({
     title: { type: String, required: true },
     icon: { type: String, required: true },
+    createdBy: { type: String, required: false },
     vocabulary: [{ type: Schema.Types.ObjectId, ref: 'Vocabulary' }],
 });
 
